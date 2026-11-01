@@ -1,0 +1,685 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Assistive Footwear System | Pranav P, JNV Palakkad</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#040714',
+                            card: 'rgba(10, 16, 35, 0.75)',
+                            border: 'rgba(0, 240, 255, 0.25)',
+                            cyan: '#00f0ff',
+                            emerald: '#10b981',
+                            pink: '#ff007f',
+                            amber: '#f59e0b',
+                            purple: '#a855f7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #030611;
+            color: #e2e8f0;
+            user-select: none;
+        }
+
+        /* Glassmorphism styling */
+        .glass-panel {
+            background: rgba(10, 16, 35, 0.7);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+        .glass-panel:hover {
+            border-color: rgba(0, 240, 255, 0.45);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+        }
+
+        /* Glowing text & borders */
+        .glow-cyan { text-shadow: 0 0 10px rgba(0, 240, 255, 0.7); }
+        .glow-emerald { text-shadow: 0 0 10px rgba(16, 185, 129, 0.7); }
+        .glow-pink { text-shadow: 0 0 10px rgba(255, 0, 127, 0.7); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #040714; }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 240, 255, 0.7); }
+
+        /* Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            height: 6px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: #00f0ff;
+            box-shadow: 0 0 12px #00f0ff;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.25);
+        }
+
+        /* Vibration Animation for Haptic simulator */
+        @keyframes haptic-vibrate {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            20% { transform: translate(-2px, 2px) rotate(-1deg); }
+            40% { transform: translate(2px, -1px) rotate(1deg); }
+            60% { transform: translate(-2px, -2px) rotate(0deg); }
+            80% { transform: translate(2px, 1px) rotate(1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        .vibrating {
+            animation: haptic-vibrate 0.15s infinite ease-in-out;
+        }
+
+        /* Pulsing RF Wave Effect */
+        @keyframes rf-pulse {
+            0% { opacity: 0.2; transform: scale(0.9); }
+            50% { opacity: 0.9; transform: scale(1.05); }
+            100% { opacity: 0.2; transform: scale(0.9); }
+        }
+        .pulse-rf {
+            animation: rf-pulse 1.2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- Top Navigation Header -->
+    <header class="w-full px-4 lg:px-8 py-4 glass-panel sticky top-0 z-40 border-b border-cyber-border flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-emerald-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                <i class="fa-solid fa-shoe-prints text-slate-950 font-black text-xl"></i>
+            </div>
+            <div>
+                <h1 class="font-extrabold text-base sm:text-xl tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-400 to-teal-200">
+                    SMART FOOTWEAR SYSTEM
+                </h1>
+                <p class="text-[10px] text-cyan-400/80 font-mono tracking-widest">ASSISTIVE NAVIGATION & SAFETY SYSTEM</p>
+            </div>
+        </div>
+
+        <!-- Student Badge Header -->
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-mono">
+            <i class="fa-solid fa-graduation-cap text-emerald-400"></i>
+            <span>Pranav P. | Class 8, JNV Palakkad</span>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1">
+
+        <!-- Hero & Architecture Overview -->
+        <section class="glass-panel rounded-2xl p-6 sm:p-8 relative overflow-hidden border border-cyan-500/30">
+            <div class="absolute -right-12 -top-12 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-12 -bottom-12 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-400/40 text-emerald-300 text-xs font-mono">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    INNOVATION SHOWCASE • ULTRASONIC & WATER SENSING SYSTEM
+                </div>
+
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                    Smart Assistive Footwear & <br class="hidden sm:inline">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-300 to-teal-400">
+                        Real-Time Hazard Alert System
+                    </span>
+                </h2>
+
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-3xl">
+                    An efficient mobility solution for the visually impaired built using an **Ultrasonic Distance Sensor (HC-SR04)** for obstacle detection, **Water Level Sensor Probes** for puddle detection, and an **Acoustic Buzzer Alert System**.
+                </p>
+
+                <!-- System Highlights Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-xs font-mono">
+                    <div class="p-3 rounded-xl bg-slate-900/80 border border-cyan-500/20 text-center">
+                        <i class="fa-solid fa-radar text-cyan-400 text-lg mb-1"></i>
+                        <div class="text-slate-400 text-[10px]">OBSTACLE SENSOR</div>
+                        <div class="text-cyan-300 font-bold">HC-SR04 Ultrasonic</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-900/80 border border-emerald-500/20 text-center">
+                        <i class="fa-solid fa-water text-emerald-400 text-lg mb-1"></i>
+                        <div class="text-slate-400 text-[10px]">PUDDLE DETECTOR</div>
+                        <div class="text-emerald-300 font-bold">Water Level Sensor</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-900/80 border border-amber-500/20 text-center">
+                        <i class="fa-solid fa-volume-high text-amber-400 text-lg mb-1"></i>
+                        <div class="text-slate-400 text-[10px]">AUDIO ALERT</div>
+                        <div class="text-amber-300 font-bold">Piezo Buzzer</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 1: INTERACTIVE HARDWARE SIMULATOR & DASHBOARD -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold text-cyan-300 font-mono flex items-center gap-2">
+                    <i class="fa-solid fa-sliders"></i> LIVE HARDWARE & SENSOR SIMULATOR
+                </h3>
+                <span class="text-[11px] font-mono px-2 py-1 rounded bg-cyan-950 text-cyan-400 border border-cyan-800">
+                    REALTIME SIMULATION
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                <!-- Controls Side (5 Cols) -->
+                <div class="lg:col-span-5 glass-panel rounded-2xl p-5 space-y-5 border border-cyan-500/25">
+                    <div class="border-b border-slate-700/60 pb-2">
+                        <h4 class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
+                            Sensor Input Controls
+                        </h4>
+                    </div>
+
+                    <!-- Distance Slider -->
+                    <div class="space-y-1 font-mono text-xs">
+                        <div class="flex justify-between text-slate-300">
+                            <span>Front Obstacle Distance (HC-SR04)</span>
+                            <span id="val-distance" class="text-cyan-400 font-bold">120 cm</span>
+                        </div>
+                        <input type="range" id="sim-distance" min="10" max="250" value="120" class="w-full">
+                        <div class="flex justify-between text-[10px] text-slate-500">
+                            <span>10cm (DANGER)</span>
+                            <span>100cm (ALERT)</span>
+                            <span>250cm (SAFE)</span>
+                        </div>
+                    </div>
+
+                    <!-- Water Puddle Depth -->
+                    <div class="space-y-1 font-mono text-xs">
+                        <div class="flex justify-between text-slate-300">
+                            <span>Puddle / Water Level Sensor</span>
+                            <span id="val-water" class="text-emerald-400 font-bold">Dry (0mm)</span>
+                        </div>
+                        <input type="range" id="sim-water" min="0" max="50" value="0" class="w-full">
+                    </div>
+
+                    <!-- Ambient Light Sensor -->
+                    <div class="space-y-1 font-mono text-xs">
+                        <div class="flex justify-between text-slate-300">
+                            <span>Ambient Light (LDR)</span>
+                            <span id="val-light" class="text-amber-400 font-bold">Daylight (800 Lux)</span>
+                        </div>
+                        <input type="range" id="sim-light" min="50" max="1000" value="800" class="w-full">
+                    </div>
+
+                    <!-- Audio Feedback Toggle -->
+                    <div class="pt-2 flex justify-between items-center border-t border-slate-700/60 font-mono text-xs">
+                        <span class="text-slate-300">Buzzer Audio Sound</span>
+                        <button id="btn-audio" onclick="toggleAudioFeedback()" class="px-3 py-1.5 rounded-lg bg-cyan-950 border border-cyan-600 text-cyan-300 font-bold transition">
+                            <i class="fa-solid fa-volume-high"></i> AUDIO ON
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Simulation Output Canvas / Graphic Display (7 Cols) -->
+                <div class="lg:col-span-7 glass-panel rounded-2xl p-5 border border-cyan-500/25 flex flex-col justify-between space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-microchip text-cyan-400"></i> Shoe System Hardware Telemetry
+                        </h4>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-700">
+                                <i class="fa-solid fa-bolt"></i> SYSTEM ACTIVE
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Live Hardware Visual Canvas -->
+                    <div class="w-full h-56 bg-slate-950/90 rounded-xl border border-slate-800 relative overflow-hidden flex items-center justify-center p-4">
+                        
+                        <!-- MAIN SMART SHOE VISUAL -->
+                        <div id="slave-shoe-box" class="w-3/5 h-full rounded-lg bg-slate-900/90 border border-cyan-500/40 p-3 flex flex-col justify-between relative transition">
+                            <div class="text-[10px] font-mono text-cyan-400 font-bold flex justify-between border-b border-slate-800 pb-1">
+                                <span>SMART FOOTWEAR UNIT</span>
+                                <span class="text-slate-400">ARDUINO UNO</span>
+                            </div>
+
+                            <!-- Status Indicators -->
+                            <div class="space-y-2 text-[11px] font-mono">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-400">Ultrasonic Distance:</span>
+                                    <span id="disp-laser" class="text-cyan-300 font-bold">120 cm</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-400">Water Sensor:</span>
+                                    <span id="disp-puddle" class="text-emerald-400">DRY</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-400">Headlight (LED):</span>
+                                    <span id="disp-led" class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">OFF</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-400">Piezo Buzzer:</span>
+                                    <span id="disp-buzzer" class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-500">SILENT</span>
+                                </div>
+                            </div>
+
+                            <div class="text-[9px] font-mono text-slate-500 text-center pt-1 border-t border-slate-800">
+                                5V Powerbank Powered
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- System Alert Message Box -->
+                    <div id="alert-banner" class="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-3 text-xs font-mono transition">
+                        <i id="alert-icon" class="fa-solid fa-shield-halved text-cyan-400 text-base"></i>
+                        <div id="alert-text" class="text-slate-300">
+                            System Status: All sensors nominal. Safe navigation distance clear.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: INTERACTIVE HARDWARE & SENSOR DIAGRAM -->
+        <section class="space-y-4">
+            <h3 class="text-lg font-bold text-emerald-400 font-mono flex items-center gap-2">
+                <i class="fa-solid fa-microchip"></i> FOOTWEAR SENSOR LAYOUT
+            </h3>
+
+            <div class="glass-panel rounded-2xl p-5 space-y-4 border border-cyan-500/30">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                    <h4 class="font-mono text-sm font-bold text-cyan-300">SMART FOOTWEAR ARCHITECTURE</h4>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-400">FRONT & SOLE SENSORS</span>
+                </div>
+
+                <div class="relative bg-slate-950/70 rounded-xl p-4 border border-slate-800 h-64 flex items-center justify-center">
+                    <!-- Shoe SVG Diagram -->
+                    <svg viewBox="0 0 400 180" class="w-full h-full drop-shadow-lg">
+                        <!-- Shoe Outline -->
+                        <path d="M 40 140 Q 60 140 90 140 L 320 140 Q 360 140 370 110 Q 380 70 330 70 Q 280 70 240 90 Q 180 90 140 60 Q 90 60 70 100 Q 40 100 40 140 Z" 
+                              fill="rgba(15, 23, 42, 0.9)" stroke="#00f0ff" stroke-width="2.5" />
+                        <!-- Sole -->
+                        <path d="M 35 140 L 375 140 L 370 155 L 40 155 Z" fill="#00f0ff" opacity="0.3" />
+
+                        <!-- Ultrasonic Sensor (Front Toe) -->
+                        <circle cx="365" cy="100" r="8" fill="#00f0ff" class="animate-pulse" />
+                        <text x="270" y="45" fill="#00f0ff" font-size="10" font-family="monospace">HC-SR04 Ultrasonic Sensor</text>
+                        <line x1="365" y1="100" x2="340" y2="50" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="3,3" />
+
+                        <!-- Water Sensor (Under Sole) -->
+                        <circle cx="200" cy="148" r="8" fill="#10b981" class="animate-pulse" />
+                        <text x="160" y="175" fill="#10b981" font-size="10" font-family="monospace">Water Level Sensor</text>
+
+                        <!-- Piezo Buzzer (Ankle) -->
+                        <rect x="110" y="70" width="16" height="16" rx="3" fill="#f59e0b" />
+                        <text x="60" y="35" fill="#f59e0b" font-size="10" font-family="monospace">Piezo Alert Buzzer</text>
+                        <line x1="118" y1="70" x2="100" y2="40" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3" />
+
+                        <!-- LDR Photoresistor & LED -->
+                        <circle cx="240" cy="75" r="6" fill="#a855f7" />
+                        <text x="210" y="30" fill="#a855f7" font-size="10" font-family="monospace">LDR & Path LED</text>
+                        <line x1="240" y1="75" x2="240" y2="35" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="3,3" />
+                    </svg>
+                </div>
+
+                <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono text-slate-300 pt-2">
+                    <li><i class="fa-solid fa-check text-cyan-400 mr-1.5"></i> <strong>Microcontroller:</strong> Arduino Uno</li>
+                    <li><i class="fa-solid fa-check text-cyan-400 mr-1.5"></i> <strong>Distance Sensor:</strong> HC-SR04 Ultrasonic</li>
+                    <li><i class="fa-solid fa-check text-cyan-400 mr-1.5"></i> <strong>Puddle Sensor:</strong> Analog Water Level Sensor</li>
+                    <li><i class="fa-solid fa-check text-cyan-400 mr-1.5"></i> <strong>Acoustic Alert:</strong> Active Piezo Buzzer</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SECTION 3: CIRCUIT PINOUT & SCHEMATICS TABLE -->
+        <section class="glass-panel rounded-2xl p-6 border border-cyan-500/25 space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-base font-bold text-cyan-300 font-mono flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project"></i> HARDWARE CIRCUIT PINOUT ASSIGNMENTS
+                </h3>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800">
+                    5V REGULATED BUS
+                </span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left font-mono text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-900/90 text-cyan-400 border-b border-slate-800">
+                            <th class="p-3">MCU Board</th>
+                            <th class="p-3">Component / Sensor</th>
+                            <th class="p-3">Pin Assignment</th>
+                            <th class="p-3">Signal Type</th>
+                            <th class="p-3">Function</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60 text-slate-300">
+                        <tr class="hover:bg-slate-900/40">
+                            <td class="p-3 font-bold text-cyan-300">Arduino Uno</td>
+                            <td class="p-3">HC-SR04 Ultrasonic (Trigger)</td>
+                            <td class="p-3 text-emerald-400">Digital Pin 4</td>
+                            <td class="p-3">Digital Output</td>
+                            <td class="p-3">Sends 10µs ultrasonic pulse</td>
+                        </tr>
+                        <tr class="hover:bg-slate-900/40">
+                            <td class="p-3 font-bold text-cyan-300">Arduino Uno</td>
+                            <td class="p-3">HC-SR04 Ultrasonic (Echo)</td>
+                            <td class="p-3 text-emerald-400">Digital Pin 5</td>
+                            <td class="p-3">Digital Input</td>
+                            <td class="p-3">Measures pulse echo duration</td>
+                        </tr>
+                        <tr class="hover:bg-slate-900/40">
+                            <td class="p-3 font-bold text-cyan-300">Arduino Uno</td>
+                            <td class="p-3">Water Level Sensor</td>
+                            <td class="p-3 text-amber-400">Analog Pin A0</td>
+                            <td class="p-3">Analog Input</td>
+                            <td class="p-3">Detects puddle/water level</td>
+                        </tr>
+                        <tr class="hover:bg-slate-900/40">
+                            <td class="p-3 font-bold text-cyan-300">Arduino Uno</td>
+                            <td class="p-3">Active Piezo Buzzer</td>
+                            <td class="p-3 text-pink-400">Digital Pin 3</td>
+                            <td class="p-3">Digital Output / PWM</td>
+                            <td class="p-3">Sound alert beeps</td>
+                        </tr>
+                        <tr class="hover:bg-slate-900/40">
+                            <td class="p-3 font-bold text-cyan-300">Arduino Uno</td>
+                            <td class="p-3">Path LED & LDR Sensor</td>
+                            <td class="p-3 text-purple-400">Pin A1 (LDR), Pin 6 (LED)</td>
+                            <td class="p-3">Analog In / PWM Out</td>
+                            <td class="p-3">Illuminates darkness</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 4: ARDUINO CODE VIEWER -->
+        <section class="glass-panel rounded-2xl p-6 border border-cyan-500/25 space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-base font-bold text-cyan-300 font-mono flex items-center gap-2">
+                    <i class="fa-solid fa-code"></i> EMBEDDED ARDUINO C++ SOURCE CODE
+                </h3>
+            </div>
+
+            <!-- Code Panel -->
+            <div class="relative">
+                <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto leading-relaxed"><code><span class="text-slate-500">// Smart Assistive Footwear Code - Pranav P., JNV Palakkad</span>
+
+<span class="text-pink-400">const int</span> TRIG_PIN = 4;
+<span class="text-pink-400">const int</span> ECHO_PIN = 5;
+<span class="text-pink-400">const int</span> WATER_PIN = A0;
+<span class="text-pink-400">const int</span> BUZZER_PIN = 3;
+<span class="text-pink-400">const int</span> LDR_PIN = A1;
+<span class="text-pink-400">const int</span> LED_PIN = 6;
+
+<span class="text-purple-400">void</span> <span class="text-cyan-300">setup</span>() {
+  Serial.<span class="text-cyan-300">begin</span>(9600);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(LED_PIN, OUTPUT);
+}
+
+<span class="text-purple-400">void</span> <span class="text-cyan-300">loop</span>() {
+  <span class="text-slate-500">// Measure Distance with Ultrasonic Sensor (HC-SR04)</span>
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+  
+  <span class="text-purple-400">long</span> duration = pulseIn(ECHO_PIN, HIGH);
+  <span class="text-purple-400">int</span> distanceCm = duration * 0.034 / 2;
+
+  <span class="text-slate-500">// Read Water Level Sensor</span>
+  <span class="text-purple-400">int</span> waterVal = analogRead(WATER_PIN);
+
+  <span class="text-slate-500">// Read LDR for automatic night headlight</span>
+  <span class="text-purple-400">int</span> ldrVal = analogRead(LDR_PIN);
+  <span class="text-pink-400">if</span> (ldrVal &lt; 300) {
+    digitalWrite(LED_PIN, HIGH);
+  } <span class="text-pink-400">else</span> {
+    digitalWrite(LED_PIN, LOW);
+  }
+
+  <span class="text-slate-500">// Buzzer Alert Logic</span>
+  <span class="text-pink-400">if</span> (distanceCm &lt; 40 && distanceCm &gt; 0) {
+    tone(BUZZER_PIN, 1000); <span class="text-slate-500">// High warning tone for close obstacle</span>
+  } <span class="text-pink-400">else if</span> (waterVal &gt; 300) {
+    tone(BUZZER_PIN, 500);  <span class="text-slate-500">// Medium tone for water puddle</span>
+  } <span class="text-pink-400">else</span> {
+    noTone(BUZZER_PIN);     <span class="text-slate-500">// Safe distance</span>
+  }
+
+  delay(50);
+}</code></pre>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER PRESENTATION CREDIT BADGE -->
+    <footer class="w-full py-8 px-4 glass-panel border-t border-cyber-border mt-12 relative overflow-hidden">
+        <div class="max-w-4xl mx-auto flex flex-col items-center justify-center text-center space-y-4">
+            
+            <!-- Glowing Student Signature Card -->
+            <div class="p-6 rounded-2xl bg-slate-950/90 border-2 border-cyan-400/50 shadow-2xl shadow-cyan-500/20 max-w-lg w-full space-y-3">
+                <div class="inline-block px-3 py-1 rounded-full text-[10px] font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 uppercase tracking-widest">
+                    PROJECT INNOVATOR & AUTHOR
+                </div>
+
+                <!-- English Signature -->
+                <h2 class="text-2xl font-extrabold text-white tracking-wide glow-cyan">
+                    Created & Presented by: <span class="text-cyan-400">Pranav P.</span>
+                </h2>
+                
+                <!-- School & Grade Info -->
+                <div class="text-sm font-mono text-emerald-300 font-semibold flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-school text-cyan-400"></i>
+                    <span>Class 8 | Jawahar Navodaya Vidyalaya (JNV) Palakkad</span>
+                </div>
+
+                <!-- Malayalam Decorative Text Signature -->
+                <div class="pt-2 border-t border-slate-800 text-sm font-semibold text-slate-300 font-sans tracking-wide">
+                    പ്രോജക്ട് നിർമ്മാണം: <span class="text-amber-400 font-bold">പ്രണവ് പി.</span> (8-ാം ക്ലാസ്, ജെ.എൻ.വി. പാലക്കാട്)
+                </div>
+            </div>
+
+            <p class="text-[11px] font-mono text-slate-500">
+                SMART ASSISTIVE FOOTWEAR SYSTEM &copy; 2026 • ALL RIGHTS RESERVED
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Interactive Logic -->
+    <script>
+        // State variables for simulator
+        let distance = 120;
+        let waterDepth = 0;
+        let lightLux = 800;
+        let audioEnabled = true;
+
+        let audioCtx = null;
+        let buzzerOsc = null;
+
+        // Interactive DOM elements
+        const simDistance = document.getElementById('sim-distance');
+        const simWater = document.getElementById('sim-water');
+        const simLight = document.getElementById('sim-light');
+
+        const valDistance = document.getElementById('val-distance');
+        const valWater = document.getElementById('val-water');
+        const valLight = document.getElementById('val-light');
+
+        const dispLaser = document.getElementById('disp-laser');
+        const dispLed = document.getElementById('disp-led');
+        const dispPuddle = document.getElementById('disp-puddle');
+        const dispBuzzer = document.getElementById('disp-buzzer');
+
+        const slaveBox = document.getElementById('slave-shoe-box');
+        const alertBanner = document.getElementById('alert-banner');
+        const alertIcon = document.getElementById('alert-icon');
+        const alertText = document.getElementById('alert-text');
+
+        // Web Audio API Sound Generator
+        function playBuzzerTone(freq) {
+            if (!audioEnabled) return;
+            try {
+                if (!audioCtx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    audioCtx = new AudioContext();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                if (buzzerOsc) {
+                    buzzerOsc.stop();
+                    buzzerOsc.disconnect();
+                }
+                if (freq > 0) {
+                    buzzerOsc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    buzzerOsc.type = 'square';
+                    buzzerOsc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                    buzzerOsc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    buzzerOsc.start();
+                }
+            } catch(e) { console.log(e); }
+        }
+
+        function stopBuzzer() {
+            if (buzzerOsc) {
+                try {
+                    buzzerOsc.stop();
+                    buzzerOsc.disconnect();
+                    buzzerOsc = null;
+                } catch(e){}
+            }
+        }
+
+        // Update Simulator Telemetry
+        function updateSimulation() {
+            distance = parseInt(simDistance.value);
+            waterDepth = parseInt(simWater.value);
+            lightLux = parseInt(simLight.value);
+
+            valDistance.innerText = distance + ' cm';
+            dispLaser.innerText = distance + ' cm';
+
+            // Puddle status
+            if (waterDepth > 0) {
+                valWater.innerText = `Water Detected (${waterDepth}mm)`;
+                dispPuddle.innerText = `WET (${waterDepth}mm)`;
+                dispPuddle.className = 'text-amber-400 font-bold';
+            } else {
+                valWater.innerText = 'Dry (0mm)';
+                dispPuddle.innerText = 'DRY';
+                dispPuddle.className = 'text-emerald-400';
+            }
+
+            // Headlight status
+            if (lightLux < 300) {
+                valLight.innerText = `Dark (${lightLux} Lux)`;
+                dispLed.innerText = 'ON (LED HIGH)';
+                dispLed.className = 'px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold';
+            } else {
+                valLight.innerText = `Bright (${lightLux} Lux)`;
+                dispLed.innerText = 'OFF';
+                dispLed.className = 'px-1.5 py-0.5 rounded bg-slate-800 text-slate-400';
+            }
+
+            // Alert logic calculation
+            if (distance < 40) {
+                // Critical Obstacle Distance
+                alertBanner.className = 'p-3 rounded-xl bg-red-950/80 border border-red-500/60 flex items-center gap-3 text-xs font-mono transition';
+                alertIcon.className = 'fa-solid fa-radiation text-red-400 text-lg animate-pulse';
+                alertText.innerHTML = `<strong class="text-red-300">HAZARD WARNING:</strong> Obstacle close (${distance} cm)! Ultrasonic alert active.`;
+
+                dispBuzzer.innerText = '850 Hz ALARM TONE';
+                dispBuzzer.className = 'px-1.5 py-0.5 rounded bg-red-900 text-red-200 font-bold';
+                playBuzzerTone(850);
+
+            } else if (distance < 90) {
+                // Moderate Distance Warning
+                alertBanner.className = 'p-3 rounded-xl bg-amber-950/80 border border-amber-500/60 flex items-center gap-3 text-xs font-mono transition';
+                alertIcon.className = 'fa-solid fa-circle-exclamation text-amber-400 text-lg';
+                alertText.innerHTML = `<strong class="text-amber-300">PROXIMITY NOTICE:</strong> Object detected at ${distance} cm.`;
+
+                dispBuzzer.innerText = '450 Hz BEEP TONE';
+                dispBuzzer.className = 'px-1.5 py-0.5 rounded bg-amber-900 text-amber-200 font-bold';
+                playBuzzerTone(450);
+
+            } else if (waterDepth > 10) {
+                // Water/Puddle Alert
+                alertBanner.className = 'p-3 rounded-xl bg-teal-950/80 border border-teal-500/60 flex items-center gap-3 text-xs font-mono transition';
+                alertIcon.className = 'fa-solid fa-droplet text-teal-400 text-lg';
+                alertText.innerHTML = `<strong class="text-teal-300">PUDDLE DETECTED:</strong> Water depth detected on sole sensor!`;
+
+                dispBuzzer.innerText = '300 Hz WATER ALERT';
+                dispBuzzer.className = 'px-1.5 py-0.5 rounded bg-teal-900 text-teal-200 font-bold';
+                playBuzzerTone(300);
+
+            } else {
+                // Nominal Safe Navigation
+                alertBanner.className = 'p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-3 text-xs font-mono transition';
+                alertIcon.className = 'fa-solid fa-shield-halved text-cyan-400 text-base';
+                alertText.innerHTML = 'System Status: Clear path ahead.';
+
+                dispBuzzer.innerText = 'SILENT';
+                dispBuzzer.className = 'px-1.5 py-0.5 rounded bg-slate-800 text-slate-500';
+                stopBuzzer();
+            }
+        }
+
+        // Toggle Sound Feedback
+        function toggleAudioFeedback() {
+            audioEnabled = !audioEnabled;
+            const btn = document.getElementById('btn-audio');
+            if (audioEnabled) {
+                btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> AUDIO ON';
+                btn.className = 'px-3 py-1.5 rounded-lg bg-cyan-950 border border-cyan-600 text-cyan-300 font-bold transition';
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> AUDIO OFF';
+                btn.className = 'px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-500 font-bold transition';
+                stopBuzzer();
+            }
+        }
+
+        // Add Input Listeners
+        simDistance.addEventListener('input', updateSimulation);
+        simWater.addEventListener('input', updateSimulation);
+        simLight.addEventListener('input', updateSimulation);
+
+        // Initial launch
+        updateSimulation();
+    </script>
+</body>
+</html>
+```
